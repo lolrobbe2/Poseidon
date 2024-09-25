@@ -29,7 +29,6 @@ def run_premake_vs2022(args):
     subprocess.run(["vendor\\premake5",
                     "vs2022",
                     "--lib-type={0}".format(args.lib_type if args.lib_type else "SharedLib"),
-                    "--api-type={0}".format(args.api_type if args.api_type else "CPP")
                     ], check=True)
 
 
@@ -92,7 +91,6 @@ def premake(args):
     print("/*------------------------------------------*/\n")
     print(ConsoleColors.YELLOW)
     print("lib-type: {0}\n".format(args.lib_type if args.lib_type else "default"))
-    print("api-type: {0}\n".format(args.api_type if args.api_type else "default"))
     
     print(ConsoleColors.RESET)
     if not is_premake_installed():

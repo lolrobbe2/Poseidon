@@ -1,0 +1,3 @@
+[submodule "PoseidonTest/src/thirdParty/Catch2"]
+	path = PoseidonTest/src/thirdParty/Catch2
+	url = https://github.com/catchorg/Catch2

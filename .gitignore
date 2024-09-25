@@ -401,3 +401,10 @@ FodyWeavers.xsd
 bin/
 bin-int/
 *.exe
+__pycache__/
+*.sln
+*.vcxproj
+*.user
+*.filters
+*.pyc
+PoseidonTest/src/thirdParty/catch2/src/catch2/catch_user_config.hpp

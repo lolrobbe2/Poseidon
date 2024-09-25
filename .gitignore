@@ -408,3 +408,5 @@ __pycache__/
 *.filters
 *.pyc
 PoseidonTest/src/thirdParty/catch2/src/catch2/catch_user_config.hpp
+/scripts/PoseidonTest/src/thirdParty/catch2/src/catch2/catch_user_config.hpp
+/scripts/PoseidonTest/src/thirdParty/Catch2Config.hpp

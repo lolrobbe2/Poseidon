@@ -19,13 +19,18 @@ namespace poseidon::core
 		hostfxr_main_bundle_startupinfo_fn mainBundleStartupinfo = nullptr;
 		hostfxr_initialize_for_runtime_config_fn initializeForRuntimeConfig = nullptr;
 		hostfxr_close_fn close = nullptr;
-		operator bool() const { return main && mainStartupInfo && mainBundleStartupinfo && initializeForRuntimeConfig; }
+		hostfxr_get_runtime_delegate_fn getRuntimeDelegate = nullptr;
+		operator bool() const { return main && mainStartupInfo && mainBundleStartupinfo && initializeForRuntimeConfig && getRuntimeDelegate; }
 	};
 	struct CoreCLRFunctions
 	{
+
+		load_assembly_and_get_function_pointer_fn loadAssemblyAndGetFunctionPointer = nullptr;
 		
+		operator bool() const { return loadAssemblyAndGetFunctionPointer; }
 	};
 	static HostFxrFunctions hostFxrFunc;
+	static CoreCLRFunctions coreClrFunc;
 	bool CoreCLR::init()
 	{
 		if (_init) return false;
@@ -99,6 +104,12 @@ namespace poseidon::core
 		return *versionDirs.begin();
 	}
 
+	bool CoreCLR::loadFunctions()
+	{
+		if (!hostFxrFunc || !_lib) return false;
+
+	}
+
 #pragma region hostfxr
 	bool HostFxr::loadFunctions()
 	{
@@ -108,6 +119,7 @@ namespace poseidon::core
 		hostFxrFunc.mainStartupInfo = (hostfxr_main_startupinfo_fn)_lib->getProcAddress("hostfxr_main_startupinfo");
 		hostFxrFunc.initializeForRuntimeConfig = (hostfxr_initialize_for_runtime_config_fn)_lib->getProcAddress("hostfxr_initialize_for_runtime_config");
 		hostFxrFunc.close = (hostfxr_close_fn)_lib->getProcAddress("hostfxr_close");
+		hostFxrFunc.getRuntimeDelegate = (hostfxr_get_runtime_delegate_fn)_lib->getProcAddress("hostfxr_get_runtime_delegate");
 	}
 	std::shared_ptr<host> HostFxr::getHost(std::filesystem::path& hostConfigJson)
 	{
@@ -159,6 +171,11 @@ namespace poseidon::core
 		if (!handle) throw new std::exception("[HostFxr] atempting to close invalid host!");
 		return hostFxrFunc.close((const hostfxr_handle) handle);
 	}
+	void HostFxr::getRuntimeDelegate(const hostHandle handle, host::delegateType type, void** delegate)
+	{
+		hostFxrFunc.getRuntimeDelegate(handle,(hostfxr_delegate_type)type, delegate);
+	}
+
 	void HostFxr::invalidateHosts()
 	{
 		for (std::shared_ptr<host> host : registeredHosts)

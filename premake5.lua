@@ -1,5 +1,14 @@
 include "scripts/generateCatch2Config.lua"
+require "vstudio"
+function platformsElement(cfg)
+    _p(2,'<Platforms>x64</Platforms>')
+end
 
+premake.override(premake.vstudio.cs2005.elements, "projectProperties", function (oldfn, cfg)
+    return table.join(oldfn(cfg), {
+    platformsElement,
+    })
+end)
 newoption {
     trigger = "enable-WSL",
     description = "enable Windows Subsytem For linux building",
@@ -173,6 +182,41 @@ project "PoseidonTest"
         toolchainversion "wsl2"
     end
 
+project "PoseidonSharp"
+    location "PoseidonSharp"
+    kind "SharedLib"
+    language "C#"
+    dotnetframework "net8.0"
+    csversion(9.0)
+    targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
+    objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
+    files
+    {
+        "%{prj.location}/src/**.cs",
+    }
+
+    filter "system:windows"
+        filter "configurations:debug"
+            symbols "On"
+        filter "configurations:release"
+            symbols "On"
+            optimize "On"
+        filter "configurations:distribution"
+            symbols "Off"
+            optimize "On"
+
+    filter "system:linux"
+        filter "configurations:debug"
+            symbols "On"
+        filter "configurations:release"
+            symbols "On"
+            optimize "On"
+        filter "configurations:distribution"
+            symbols "Off"
+            optimize "On"
+    if _OPTIONS["enable-WSL"] then
+        toolchainversion "wsl2"
+    end
 
 if not _OPTIONS["no-sandbox"] then
 group"SANDBOX"
@@ -183,13 +227,15 @@ project "sandbox"
 
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
+    debugdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
     includedirs
     {
         "../Poseidon/Poseidon/src"
     }
     links
     {
-        "Poseidon"
+        "Poseidon",
+        "PoseidonSharp"
     }
     files
     {

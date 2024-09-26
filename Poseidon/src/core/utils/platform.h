@@ -17,8 +17,11 @@
 #include <Windows.h>
 #ifdef _WCHAR_T_DEFINED
 typedef wchar_t char_t;
+#define PD_STR(s) L##s
+#define PD_CALLTYPE __cdecl
 #else
 typedef unsigned short char_t;
+#define PD_STR(s) s
 #endif
 #endif
 

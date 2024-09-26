@@ -18,7 +18,7 @@ namespace poseidon
 		procAddress dynamicLibrary::getProcAddress(const std::string& functionName)
 		{
 			procAddress proc = GET_PROC_ADDRESS(functionName.c_str());
-			std::cout << "[dynamicLibrary] unable to load procedure!" << std::endl;
+			if(!proc) std::cout << "[dynamicLibrary] unable to load procedure!" << std::endl;
 			return proc;
 		}
 	}

@@ -16,6 +16,7 @@ namespace poseidon
 			static std::filesystem::path getCoreCLRPath();
 			static std::filesystem::path getHostfxrPath();
 			static std::filesystem::path getLatestVersionDir(std::filesystem::path hostfxrPath);
+			static bool loadFunctions();
 		private:
 
 		};
@@ -42,6 +43,8 @@ namespace poseidon
 				int64_t bundle_header_offset);
 			static int32_t initializeForRuntimeConfig(const unsigned short* runtime_config_path, hostHandle* handle);
 			static int32_t close(hostHandle handle);
+			static void getRuntimeDelegate(const hostHandle handle,enum host::delegateType type,void** delegate);
+			
 		protected:
 			friend class CoreCLR;
 			static void invalidateHosts();

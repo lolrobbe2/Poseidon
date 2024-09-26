@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\native\AssemblyLoader.cs" />
+    <Compile Include="src\native\interop\Bool32.cs" />
     <Compile Include="src\native\interop\NativeString.cs" />
   </ItemGroup>
 </Project>

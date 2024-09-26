@@ -18,6 +18,7 @@ namespace poseidon::core
 	{
 		if (!isValid()) return;
 		HostFxr::close(m_handle);
+		loadDelegates();
 		m_handle = nullptr;
 	}
 	int host::getUnmangedFunctionPtr(const char_t* typeName, const char_t* methodName, void** function)
@@ -25,6 +26,10 @@ namespace poseidon::core
 		
 		if (!functions) return hostres::failure;
 		return functions.get_function_pointer_ptr(typeName, methodName,UNMANAGEDCALLERSONLY_METHOD,nullptr ,nullptr, function);
+	}
+	std::shared_ptr<native::assemblyLoader> host::getAssemblyLoader(const std::string& name)
+	{
+		return std::make_shared<native::assemblyLoader>(shared_from_this(),name);
 	}
 	host::hostres host::loadAssembly(std::filesystem::path path)
 	{

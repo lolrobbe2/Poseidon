@@ -2,6 +2,7 @@
 #ifndef _HOST_
 #define _HOST_
 #include "delegates/hdtDelegates.h"
+#include <core/native/AssemblyLoader.h>
 #include <filesystem>
 typedef void* hostHandle;
 typedef int (PD_CALLTYPE* UnmanagedFunctionPtr)();
@@ -13,10 +14,9 @@ namespace poseidon::core
 		friend class host;
 		load_assembly_fn load_assembly_ptr = nullptr;
 		get_function_pointer_fn get_function_pointer_ptr = nullptr;
-
 		operator bool()const { return load_assembly_ptr && get_function_pointer_ptr; }
 	};
-	class host
+	class host : public std::enable_shared_from_this<host>
 	{
 	public:
 		enum hostres : int
@@ -73,6 +73,7 @@ namespace poseidon::core
 		int getUnmangedFunctionPtr(const char_t* typeName, const char_t* methodName, void** function);
 		bool isValid() const { return m_handle; }
 		void getRuntimeDelegate(enum host::delegateType type, void** delegate);
+		std::shared_ptr<native::assemblyLoader> getAssemblyLoader(const std::string& name = "root");
 		hostres loadAssembly(std::filesystem::path path);
 		operator bool() const { return m_handle; }
 	private:

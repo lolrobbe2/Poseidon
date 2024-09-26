@@ -11,8 +11,8 @@ namespace PoseidonSharp.native.interop
     public struct NativeString
     {
         internal IntPtr m_NativeString;
-        [MarshalAs(UnmanagedType.Bool)] 
-        private bool m_IsDisposed;
+      
+        private Bool32 m_IsDisposed;
 
         public void Dispose()
         {
@@ -35,6 +35,6 @@ namespace PoseidonSharp.native.interop
         public static NativeString Null() => new NativeString() { m_NativeString = IntPtr.Zero };
 
         public static implicit operator NativeString(string? InString) => new() { m_NativeString = Marshal.StringToCoTaskMemAuto(InString) };
-        public static implicit operator string?(NativeString InString) => Marshal.PtrToStringAuto(InString.m_NativeString);
+        public static implicit operator string?(NativeString InString) => Marshal.PtrToStringUTF8(InString.m_NativeString);
     }
 }

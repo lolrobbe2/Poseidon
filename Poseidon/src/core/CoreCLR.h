@@ -13,8 +13,9 @@ namespace poseidon
 			static bool init();
 			static bool shutdown();
 			static std::filesystem::path getDotnetRoot();
+			static std::filesystem::path getCoreCLRPath();
 			static std::filesystem::path getHostfxrPath();
-			static std::filesystem::path getLatestHostfxrVersionDir(std::filesystem::path hostfxrPath);
+			static std::filesystem::path getLatestVersionDir(std::filesystem::path hostfxrPath);
 		private:
 
 		};
@@ -41,6 +42,9 @@ namespace poseidon
 				int64_t bundle_header_offset);
 			static int32_t initializeForRuntimeConfig(const unsigned short* runtime_config_path, hostHandle* handle);
 			static int32_t close(hostHandle handle);
+		protected:
+			friend class CoreCLR;
+			static void invalidateHosts();
 		};
 	}
 }

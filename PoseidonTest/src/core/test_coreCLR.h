@@ -17,3 +17,10 @@ TEST_CASE("CoreCLR_init init returns false when initialized") {
 TEST_CASE("Hostfxr_loadfunctions Hostfxr loadfunctions fails when _lib is not valid") {
 	REQUIRE_FALSE(poseidon::core::HostFxr::loadFunctions());
 }
+
+TEST_CASE("Host hosts are invalidated after CoreCLR shutdown"){
+	poseidon::core::CoreCLR::init();
+	std::shared_ptr<poseidon::core::host> host = poseidon::core::HostFxr::getHost();
+	poseidon::core::CoreCLR::shutdown();
+	REQUIRE_FALSE(host->isValid());
+}

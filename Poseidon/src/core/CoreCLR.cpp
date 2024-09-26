@@ -1,5 +1,6 @@
 #include "CoreCLR.h"
 #include <thirdParty/coreclr/hostfxr.h>
+#include <thirdParty/coreclr/coreclr_delegates.h>
 #include <core/utils/dynamicLibrary.h>
 #include <regex>
 #include <iostream>
@@ -10,7 +11,7 @@ namespace poseidon::core
 {
 	static bool _init = false;
 	static std::shared_ptr<platform::dynamicLibrary> _lib;
-
+	static std::vector<std::shared_ptr<host>> registeredHosts;
 	struct HostFxrFunctions
 	{
 		hostfxr_main_fn main = nullptr;
@@ -20,7 +21,10 @@ namespace poseidon::core
 		hostfxr_close_fn close = nullptr;
 		operator bool() const { return main && mainStartupInfo && mainBundleStartupinfo && initializeForRuntimeConfig; }
 	};
-
+	struct CoreCLRFunctions
+	{
+		
+	};
 	static HostFxrFunctions hostFxrFunc;
 	bool CoreCLR::init()
 	{
@@ -34,6 +38,7 @@ namespace poseidon::core
 	bool CoreCLR::shutdown()
 	{
 		if (!_init) return false;
+		HostFxr::invalidateHosts();
 		_lib.reset();
 		_init = false;
 		return true;
@@ -48,9 +53,13 @@ namespace poseidon::core
 		}
 		return envPath;
 	}
+	std::filesystem::path CoreCLR::getCoreCLRPath()
+	{
+		return getLatestVersionDir((getDotnetRoot().string() + "shared/Microsoft.NETCore.App/"));
+	}
 	std::filesystem::path CoreCLR::getHostfxrPath()
 	{
-		return getLatestHostfxrVersionDir((getDotnetRoot().string() + "host/fxr/"));
+		return getLatestVersionDir((getDotnetRoot().string() + "host/fxr/"));
 	}
 
 	std::tuple<int, int, int> parseVersion(const std::string& versionStr)
@@ -68,7 +77,7 @@ namespace poseidon::core
 		return { 0, 0, 0 };
 	}
 
-	std::filesystem::path CoreCLR::getLatestHostfxrVersionDir(std::filesystem::path hostfxrPath)
+	std::filesystem::path CoreCLR::getLatestVersionDir(std::filesystem::path hostfxrPath)
 	{
 		std::vector<std::filesystem::path> versionDirs;
 		for (const auto& entry : std::filesystem::directory_iterator(hostfxrPath))
@@ -104,7 +113,8 @@ namespace poseidon::core
 	{
 		hostHandle handle;
 		initializeForRuntimeConfig((unsigned short*)std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(hostConfigJson.string()).c_str(), &handle);
-		return std::make_shared<host>(handle);
+		registeredHosts.push_back(std::make_shared<host>(handle));
+		return registeredHosts.back();
 	}
 	std::shared_ptr<host> HostFxr::getHost()
 	{
@@ -148,6 +158,13 @@ namespace poseidon::core
 	{
 		if (!handle) throw new std::exception("[HostFxr] atempting to close invalid host!");
 		return hostFxrFunc.close((const hostfxr_handle) handle);
+	}
+	void HostFxr::invalidateHosts()
+	{
+		for (std::shared_ptr<host> host : registeredHosts)
+			host->release();
+
+		registeredHosts.clear();
 	}
 #pragma endregion
 }

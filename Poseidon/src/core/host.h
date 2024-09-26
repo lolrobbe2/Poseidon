@@ -14,6 +14,7 @@ namespace poseidon::core
 
 		~host();
 		const hostHandle native() const { return m_handle; }
+		void release();
 		bool isValid() const { return m_handle; }
 		operator bool() const { return m_handle; }
 	private:

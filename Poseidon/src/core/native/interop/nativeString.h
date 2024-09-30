@@ -19,15 +19,15 @@ public:
     // Constructor - Initializes with a C-style string (nullptr if not provided)
     nativeString(const char* str = nullptr) : m_NativeString(nullptr), m_IsDisposed(false)
     {
-        if (str)
-        {
-            // Allocate memory and copy the input string
-            m_NativeString = (char*)malloc(strlen(str) + 1);
-            if (m_NativeString)
-            {
-                strcpy(m_NativeString, str); // Copy the content of the string
-            }
-        }
+        if (!str) return;
+        
+        // Allocate memory and copy the input string
+        m_NativeString = (char*)malloc(strlen(str) + 1);
+        if (m_NativeString)
+           strcpy(m_NativeString, str); // Copy the content of the string
+    }
+    nativeString(const std::string& str) : nativeString(str.c_str()){
+
     }
 
     // Destructor - Calls Dispose to clean up the allocated memory

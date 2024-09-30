@@ -18,7 +18,7 @@ namespace poseidon::core
 	{
 		if (!isValid()) return;
 		HostFxr::close(m_handle);
-		loadDelegates();
+
 		m_handle = nullptr;
 	}
 	int host::getUnmangedFunctionPtr(const char_t* typeName, const char_t* methodName, void** function)

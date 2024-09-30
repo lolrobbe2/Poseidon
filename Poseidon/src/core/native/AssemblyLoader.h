@@ -8,7 +8,7 @@
 namespace poseidon::core{ class host; }
 namespace poseidon::core::native 
 {
-	typedef struct assemblyLoaderFunctions;
+	struct assemblyLoaderFunctions;
 	class assemblyLoader 
 	{
 	public:

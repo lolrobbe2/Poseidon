@@ -3,6 +3,6 @@
 #include <core/utils/platform.h>
 namespace poseidon::core
 {
-	using createContextFunc = int (PD_CALLTYPE*)(nativeString string);
-	typedef int (PD_CALLTYPE* loadAssemblyFunc)(int contextId, nativeString path);
+	using f_createContext = int (PD_CALLTYPE*)(nativeString string);
+	using f_loadAssembly = int (PD_CALLTYPE*)(int contextId, nativeString path);
 }

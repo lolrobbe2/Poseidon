@@ -49,7 +49,6 @@ if not _OPTIONS["skip-catch-config"] then
     generate_catch_config()
 end
 if not _OPTIONS["project-include"] then
-startproject "sandbox"
 workspace "Poseidon"
     architecture "x64"
     
@@ -127,6 +126,7 @@ project "PoseidonTest"
     language "c++"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
+    debugdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     files
     {
         "%{prj.location}/src/**.c",
@@ -227,7 +227,7 @@ project "sandbox"
 
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
-    debugdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
+    debugdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     includedirs
     {
         "../Poseidon/Poseidon/src"
@@ -242,7 +242,7 @@ project "sandbox"
         "%{prj.location}/src/**.c",
         "%{prj.location}/src/**.h",
         "%{prj.location}/src/**.hpp",
-        "%{prj.location}/src/**.cpp",
+        "%{prj.location}/**.cpp",
     }
     filter "system:windows"
         cppdialect "c++20"

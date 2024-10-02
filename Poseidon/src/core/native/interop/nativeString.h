@@ -2,7 +2,6 @@
 #ifndef _NATIVE_STRING_
 #define _NATIVE_STRING_
 
-#endif // !_NATIVE_STRING_
 
 #include <iostream>
 #include <cstring>  // For string operations
@@ -23,8 +22,10 @@ public:
         
         // Allocate memory and copy the input string
         m_NativeString = (char*)malloc(strlen(str) + 1);
-        if (m_NativeString)
-           strcpy(m_NativeString, str); // Copy the content of the string
+        
+        if (!m_NativeString) return;
+
+        strcpy(m_NativeString, str); // Copy the content of the string
     }
     nativeString(const std::string& str) : nativeString(str.c_str()){
 
@@ -39,16 +40,11 @@ public:
     // Dispose method - Frees the allocated memory
     void Dispose()
     {
-        if (!m_IsDisposed)
-        {
-            if (m_NativeString != nullptr)
-            {
-                free(m_NativeString);       // Free the memory allocated for the string
-                m_NativeString = nullptr;   // Set the pointer to nullptr
-            }
+        if (m_IsDisposed || !m_NativeString) return;
 
-            m_IsDisposed = true;            // Mark as disposed
-        }
+        free(m_NativeString);       // Free the memory allocated for the string
+        m_NativeString = nullptr;   // Set the pointer to nullptr
+        m_IsDisposed = true;            // Mark as disposed
     }
 
     // Implicit conversion to std::string for easy use in C++
@@ -76,3 +72,4 @@ public:
     }
 };
 #pragma pack(pop)
+#endif // !_NATIVE_STRING_

@@ -46,7 +46,7 @@ namespace PoseidonSharp.native
         public NativeArray<AssemblyClass> GetClasses()
         {
    
-                return new NativeArray<AssemblyClass>(GetNative().GetTypes().Where(type => type.IsClass).Select(ClassType => new AssemblyClass(ClassType, m_ContextId, m_AssemblyId)).ToArray());
+                return new NativeArray<AssemblyClass>(GetNative().GetTypes().Where(type => type.IsClass && !(type.Name.StartsWith('<') || type.Name.EndsWith('>'))).Select(ClassType => new AssemblyClass(ClassType, m_ContextId, m_AssemblyId)).ToArray());
 
     
 

@@ -58,7 +58,6 @@ namespace poseidon::core::native
 	{
 		if (p_assemblyFunctions) return;
 		p_assemblyFunctions = new assemblyFunctions();
-		std::cout << "abc: " << sizeof(nativeArray<assemblyClass>) << std::endl;
 		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetNameNative"), (void**)&p_assemblyFunctions->assemblyGetNameNativePtr);
 		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionStringNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNativeString);
 		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNative);

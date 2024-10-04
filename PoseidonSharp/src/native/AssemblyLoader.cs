@@ -14,7 +14,8 @@ namespace PoseidonSharp.native
         {
             failure = -1,
             badILformat = -2,
-            badPath = -3
+            badPath = -3,
+            fileNotFound = -4,
         }
         private static readonly Dictionary<int, Assembly> s_AssemblyCache = new();
 
@@ -41,16 +42,16 @@ namespace PoseidonSharp.native
         [UnmanagedCallersOnly]
         internal static AssemblyLoadRes LoadAssembly(int loadAssemblyContextId, NativeString path)
         {
-            Console.WriteLine(path);
             try
             {
                 Assembly asm = assemblyLoadContexts[loadAssemblyContextId].LoadFromAssemblyPath(path);
                 s_AssemblyCache.Add(loadAssemblyContextId, asm);
                 return (AssemblyLoadRes)asm.GetHashCode();
             }
-            catch (BadImageFormatException e) { return AssemblyLoadRes.badILformat; }
-            catch (ArgumentException e) { Console.WriteLine(e.ToString()); }
-            return AssemblyLoadRes.failure;
+            catch (BadImageFormatException) { return AssemblyLoadRes.badILformat; }
+            catch (ArgumentException) { return AssemblyLoadRes.badPath; }
+            catch (System.IO.FileNotFoundException) { return AssemblyLoadRes.fileNotFound; }
+            catch (Exception) { return AssemblyLoadRes.failure; }
         }
 
         internal static Assembly GetAssembly(int loadAssemblyContextId,int assemblyId)

@@ -5,7 +5,6 @@
 #include <core/native/interop/interop.h>
 #include <filesystem>
 #include <core/native/assembly.h>
-namespace poseidon::core{ class host; }
 namespace poseidon::core::native 
 {
 	struct assemblyLoaderFunctions;

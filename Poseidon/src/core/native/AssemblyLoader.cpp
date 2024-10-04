@@ -2,6 +2,7 @@
 #include <core/host.h>
 #include <core/delegates/assemblyLoaderDelegates.h>
 #include <core/native/interop/interop.h>
+#include <core/native/assemblyClass.h>
 namespace poseidon::core::native
 {
 	struct assemblyLoaderFunctions
@@ -12,6 +13,8 @@ namespace poseidon::core::native
 	assemblyLoader::assemblyLoader(std::shared_ptr<host> p_host, const std::string& name) :p_host(p_host){
 		loadFunctions();
 		m_loadContextId = createContext(name);
+		assemblyClass::loadFunctions(p_host);
+
 	}
 	void assemblyLoader::loadFunctions()
 	{
@@ -23,7 +26,7 @@ namespace poseidon::core::native
 	std::shared_ptr<assembly> assemblyLoader::loadAssembly(std::filesystem::path path)
 	{
 		nativeString n_path{ (char*)std::filesystem::absolute(path).string().c_str()};
-		return std::make_shared<assembly>(p_assemblyLoaderFunctions->p_loadAssembly(m_loadContextId,n_path));
+		return std::make_shared<assembly>(p_host,p_assemblyLoaderFunctions->p_loadAssembly(m_loadContextId,n_path),m_loadContextId);
 	}
 	int assemblyLoader::createContext(const std::string& name)
 	{

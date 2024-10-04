@@ -12,9 +12,9 @@ struct nativeString
 {
 private:
     char* m_NativeString; // Pointer to dynamically allocated string
-    uint32_t m_IsDisposed;    // Disposal flag
+    uint32_t m_IsDisposed = true;    // Disposal flag
 
-public:
+public: 
     // Constructor - Initializes with a C-style string (nullptr if not provided)
     nativeString(const char* str = nullptr) : m_NativeString(nullptr), m_IsDisposed(false)
     {
@@ -25,7 +25,8 @@ public:
         
         if (!m_NativeString) return;
 
-        strcpy(m_NativeString, str); // Copy the content of the string
+        strcpy_s(m_NativeString, strlen(str) + 1, str);
+
     }
     nativeString(const std::string& str) : nativeString(str.c_str()){
 
@@ -51,12 +52,6 @@ public:
     operator std::string() const
     {
         return m_NativeString ? std::string(m_NativeString) : std::string();
-    }
-
-    // Static method to return a "null" nativeString
-    static nativeString Null()
-    {
-        return nativeString(nullptr); // Return an empty nativeString
     }
 
     // Implicit conversion from std::string to nativeString

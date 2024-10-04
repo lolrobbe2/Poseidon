@@ -1,3 +1,4 @@
+
 #include "CoreCLR.h"
 #include <thirdParty/coreclr/hostfxr.h>
 #include <thirdParty/coreclr/coreclr_delegates.h>
@@ -6,6 +7,7 @@
 #include <iostream>
 #include <codecvt>
 #include <fstream>
+#pragma warning(disable : 4966)
 
 namespace poseidon::core
 {
@@ -120,6 +122,7 @@ namespace poseidon::core
 		hostFxrFunc.initializeForRuntimeConfig = (hostfxr_initialize_for_runtime_config_fn)_lib->getProcAddress("hostfxr_initialize_for_runtime_config");
 		hostFxrFunc.close = (hostfxr_close_fn)_lib->getProcAddress("hostfxr_close");
 		hostFxrFunc.getRuntimeDelegate = (hostfxr_get_runtime_delegate_fn)_lib->getProcAddress("hostfxr_get_runtime_delegate");
+		return true;
 	}
 	std::shared_ptr<host> HostFxr::getHost(std::filesystem::path& hostConfigJson)
 	{
@@ -185,3 +188,4 @@ namespace poseidon::core
 	}
 #pragma endregion
 }
+#pragma warning(pop)

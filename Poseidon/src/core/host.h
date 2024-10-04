@@ -44,6 +44,7 @@ namespace poseidon::core
 		host(hostHandle handle) : m_handle(handle)
 		{
 			loadDelegates();
+			loadAssembly("./PoseidonSharp.dll");
 		}
 
 		~host();

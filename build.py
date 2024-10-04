@@ -10,16 +10,6 @@ from scripts.setupPython import PythonConfiguration as PythonRequirements
 
 # Function to map 'Static' to 'StaticLib' and 'Shared' to 'SharedLib'
 
-def lib_type_mapping(value):
-    mapping = {
-        'Static': 'StaticLib',
-        'Shared': 'SharedLib',
-        'StaticLib': 'StaticLib',
-        'SharedLib': 'SharedLib'
-    }
-    if value not in mapping:
-        raise argparse.ArgumentTypeError(f"Invalid choice: {value} (choose from 'SharedLib', 'Shared', 'StaticLib', 'Static')")
-    return mapping[value]
 
 def main():
     # parse options
@@ -40,13 +30,6 @@ def main():
         "--enable-WSL",
         action="store_true",
         help="enables windows subsystem for linux building of Athena"
-    )
-    parser.add_argument(
-        "--lib-type",
-        type=lib_type_mapping,
-        choices=['SharedLib','Shared','StaticLib','Static'],
-        help="Choose a library type.",
-        default="StaticLib"  
     )
     args = parser.parse_args()
 

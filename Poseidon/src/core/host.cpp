@@ -6,10 +6,6 @@
 #include <thirdParty/coreclr/coreclr_delegates.h>
 namespace poseidon::core
 {
-	const char_t* convertString(const std::string& str) {
-		std::wstring strs = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(str).c_str();
-		return strs.c_str();
-	}
 	host::~host()
 	{
 		release();

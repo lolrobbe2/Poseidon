@@ -5,22 +5,31 @@ using System.Runtime.InteropServices;
 namespace PoseidonSharp.native.interop
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct NativeString
+    public struct NativeString : IDisposable
     {
         internal IntPtr m_NativeString;      
         private Bool32 m_IsDisposed;
 
-        
+        public void setManaged(bool managed)
+        {
+           if(managed) m_IsDisposed = managed;
+        }
         public void Dispose()
         {
-            if (!m_IsDisposed || m_NativeString != IntPtr.Zero) return;
+            Dispose(true);
+            GC.SuppressFinalize(this);
 
+        }
+        private void Dispose(bool disposing)
+        {
+            if (m_IsDisposed || m_NativeString == IntPtr.Zero) return;
+
+            // Free the unmanaged memory (if allocated)
             Marshal.FreeCoTaskMem(m_NativeString);
             m_NativeString = IntPtr.Zero;
 
+            // Mark as disposed
             m_IsDisposed = true;
-
-            GC.SuppressFinalize(this);
         }
         public IntPtr ToIntptr()
         {
@@ -40,5 +49,14 @@ namespace PoseidonSharp.native.interop
         public static implicit operator NativeString(string? InString) => new() { m_IsDisposed = false,m_NativeString = Marshal.StringToCoTaskMemUTF8(InString) };
         public static implicit operator string?(NativeString InString) => Marshal.PtrToStringUTF8(InString.m_NativeString);
         public static implicit operator IntPtr(NativeString InString) => InString.ToIntptr();
+
+        [UnmanagedCallersOnly]
+        internal static void DisposeUnmanaged(IntPtr nativeStringPtr)
+        {
+            try
+            {
+                Marshal.PtrToStructure<NativeString>(nativeStringPtr).Dispose();
+            }catch(Exception e) { Console.WriteLine(e.ToString()); }
+        }
     }
 }

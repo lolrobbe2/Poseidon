@@ -4,6 +4,7 @@
 #include "delegates/hdtDelegates.h"
 #include <core/native/AssemblyLoader.h>
 #include <filesystem>
+#include <core/managed/garbageCollector.h>
 typedef void* hostHandle;
 typedef int (PD_CALLTYPE* UnmanagedFunctionPtr)();
 namespace poseidon::core
@@ -41,11 +42,7 @@ namespace poseidon::core
 			load_assembly_bytes,
 		};
 		host() = default;
-		host(hostHandle handle) : m_handle(handle)
-		{
-			loadDelegates();
-			loadAssembly("./PoseidonSharp.dll");
-		}
+		host(hostHandle handle);
 
 		~host();
 		const hostHandle native() const { return m_handle; }
@@ -74,6 +71,7 @@ namespace poseidon::core
 		int getUnmangedFunctionPtr(const char_t* typeName, const char_t* methodName, void** function);
 		bool isValid() const { return m_handle; }
 		void getRuntimeDelegate(enum host::delegateType type, void** delegate);
+		std::shared_ptr<garbageCollector> getGarbageCollector();
 		std::shared_ptr<native::assemblyLoader> getAssemblyLoader(const std::string& name = "root");
 		hostres loadAssembly(std::filesystem::path path);
 		operator bool() const { return m_handle; }
@@ -82,6 +80,7 @@ namespace poseidon::core
 		hostFunctions functions;
 		void loadDelegates();
 		hostHandle m_handle;
+		std::shared_ptr<garbageCollector> p_garbageCollector;
 	};
 
 }

@@ -181,9 +181,6 @@ namespace poseidon::core
 
 	void HostFxr::invalidateHosts()
 	{
-		for (std::shared_ptr<host> host : registeredHosts)
-			host->release();
-
 		registeredHosts.clear();
 	}
 #pragma endregion

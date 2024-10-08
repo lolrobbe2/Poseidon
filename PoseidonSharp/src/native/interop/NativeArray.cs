@@ -38,6 +38,7 @@ namespace PoseidonSharp.native.interop
         // Dispose method for freeing unmanaged memory
         public void Dispose()
         {
+            handle.Free();  
             Dispose(true);
             GC.SuppressFinalize(this); // Prevent finalizer from running
         }
@@ -59,7 +60,7 @@ namespace PoseidonSharp.native.interop
 
             return handle.AddrOfPinnedObject();
         }
-        
+         
         // Finalizer for cleanup (if Dispose is not called)
 
     }

@@ -48,6 +48,7 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'distribution|x64' ">
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Managed\GarbageCollector.cs" />
     <Compile Include="src\native\AssemblyClass.cs" />
     <Compile Include="src\native\AssemblyLoader.cs" />
     <Compile Include="src\native\interop\Field.cs" />

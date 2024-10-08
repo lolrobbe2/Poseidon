@@ -42,7 +42,6 @@ public:
     void Dispose()
     {
         if (m_IsDisposed || !m_NativeString) return;
-
         free(m_NativeString);       // Free the memory allocated for the string
         m_NativeString = nullptr;   // Set the pointer to nullptr
         m_IsDisposed = true;            // Mark as disposed

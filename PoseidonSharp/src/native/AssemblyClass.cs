@@ -21,8 +21,11 @@ namespace PoseidonSharp.native
             ContextId = contextId;
             AssemblyId = assemblyId;
             Name = type.Name;
+            Name.setManaged(true);
             NameSpace = type.Namespace;
+            NameSpace.setManaged(true);
             AssemblyName = type.Assembly.GetName().Name;
+            AssemblyName.setManaged(true);
         }
     }
 }

@@ -7,13 +7,13 @@
 #include <iostream>
 #include <codecvt>
 #include <fstream>
-#pragma warning(disable : 4966)
+#pragma warning(push : 4966)
 
 namespace poseidon::core
 {
 	static bool _init = false;
 	static std::shared_ptr<platform::dynamicLibrary> _lib;
-	static std::vector<std::shared_ptr<host>> registeredHosts;
+	static std::vector<r_host> registeredHosts;
 	struct HostFxrFunctions
 	{
 		hostfxr_main_fn main = nullptr;
@@ -46,7 +46,7 @@ namespace poseidon::core
 	{
 		if (!_init) return false;
 		HostFxr::invalidateHosts();
-		_lib.reset();
+		
 		_init = false;
 		return true;
 	}
@@ -124,14 +124,15 @@ namespace poseidon::core
 		hostFxrFunc.getRuntimeDelegate = (hostfxr_get_runtime_delegate_fn)_lib->getProcAddress("hostfxr_get_runtime_delegate");
 		return true;
 	}
-	std::shared_ptr<host> HostFxr::getHost(std::filesystem::path& hostConfigJson)
+	r_host HostFxr::getHost(std::filesystem::path& hostConfigJson)
 	{
+	
 		hostHandle handle;
 		initializeForRuntimeConfig((unsigned short*)std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(hostConfigJson.string()).c_str(), &handle);
 		registeredHosts.push_back(std::make_shared<host>(handle));
 		return registeredHosts.back();
 	}
-	std::shared_ptr<host> HostFxr::getHost()
+	r_host HostFxr::getHost()
 	{
 		std::ofstream file("poseidonRuntimeConfig.json");
 
@@ -152,7 +153,7 @@ namespace poseidon::core
 		std::filesystem::path configPath = "poseidonRuntimeConfig.json";
 		return getHost(configPath);
 	}
-	int32_t HostFxr::main(const int argc, const unsigned short** argv)
+	int32_t HostFxr::_main(const int argc, const unsigned short** argv)
 	{
 		return hostFxrFunc.main(argc,(const char_t**)argv);
 	}
@@ -172,6 +173,14 @@ namespace poseidon::core
 	int32_t HostFxr::close(const hostHandle handle)
 	{
 		if (!handle) throw new std::exception("[HostFxr] atempting to close invalid host!");
+		if (!_init)return 0;
+
+		auto it = std::find_if(registeredHosts.begin(), registeredHosts.end(),
+			[handle](const std::shared_ptr<host>& h) { return h->native() == handle; });
+
+		if (it == registeredHosts.end())
+			throw new std::exception("[HostFxr] host was already unregistered");
+		registeredHosts.erase(it);
 		return hostFxrFunc.close((const hostfxr_handle) handle);
 	}
 	void HostFxr::getRuntimeDelegate(const hostHandle handle, host::delegateType type, void** delegate)
@@ -181,7 +190,8 @@ namespace poseidon::core
 
 	void HostFxr::invalidateHosts()
 	{
-		registeredHosts.clear();
+		for (auto host : registeredHosts)
+			host->release();
 	}
 #pragma endregion
 }

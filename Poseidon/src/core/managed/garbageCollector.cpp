@@ -8,8 +8,7 @@ namespace poseidon::core
 		f_collectGarbage collectGarbagePtr = nullptr;
 		f_unpinHandle GCHandleFreePtr = nullptr;
 	};
-	garbageCollectorFunctions* p_garbageCollectorFunctions = nullptr;
-	garbageCollector::garbageCollector(std::shared_ptr<host> p_host) : p_host(p_host)
+	garbageCollector::garbageCollector(r_host host) : p_host(host)
 	{
 		if (p_garbageCollectorFunctions) return;
 		p_garbageCollectorFunctions = new garbageCollectorFunctions();
@@ -18,12 +17,14 @@ namespace poseidon::core
 
 	}
 
-	void garbageCollector::collect() 
+	void garbageCollector::collect() const
 	{
+		if (!p_host->isValid()) return;
 		p_garbageCollectorFunctions->collectGarbagePtr();
 	}
-	void garbageCollector::unpinHandle(void* handle)
+	void garbageCollector::unpinHandle(void* handle) const
 	{
+		if (!p_host->isValid()) return;
 		p_garbageCollectorFunctions->GCHandleFreePtr(handle);
 	}
 }

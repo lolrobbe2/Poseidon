@@ -2,7 +2,7 @@
 #ifndef _ASSEMBLY_CLASS_
 #define _ASSEMBLY_CLASS_
 #include <core/native/interop/interop.h>
-
+#include <core/native/refTypes.h>
 #pragma pack(push,1)
 namespace poseidon::core
 {
@@ -10,7 +10,7 @@ namespace poseidon::core
 	class assemblyClass
 	{
 	public:
-		static void loadFunctions(std::shared_ptr<host> p_host);
+		static void loadFunctions(r_host host);
 	private:
 		const nativeString name;
 		const nativeString nameSpace;

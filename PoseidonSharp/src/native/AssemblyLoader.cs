@@ -38,7 +38,12 @@ namespace PoseidonSharp.native
             
             return context.GetHashCode();
         }
-
+        [UnmanagedCallersOnly]
+        internal static void ReleaseContext(int loadAssemblyContextId)
+        {
+            if (assemblyLoadContexts.ContainsKey(loadAssemblyContextId))
+                assemblyLoadContexts.Remove(loadAssemblyContextId);
+        }
         [UnmanagedCallersOnly]
         internal static AssemblyLoadRes LoadAssembly(int loadAssemblyContextId, NativeString path)
         {

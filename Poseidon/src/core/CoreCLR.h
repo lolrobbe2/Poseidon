@@ -3,6 +3,7 @@
 #define _CORE_CLR_
 #include <filesystem>
 #include "host.h"
+#include <core/native/refTypes.h>
 namespace poseidon
 {
 	namespace core
@@ -18,18 +19,18 @@ namespace poseidon
 			static std::filesystem::path getLatestVersionDir(std::filesystem::path hostfxrPath);
 			static bool loadFunctions();
 		private:
-
+			static inline bool m_init = false;
 		};
 		class HostFxr
 		{
 		public:
 			static bool loadFunctions();
-			static std::shared_ptr<host> getHost(std::filesystem::path& hostConfigJson);
-			static std::shared_ptr<host> getHost();
+			static r_host getHost(std::filesystem::path& hostConfigJson);
+			static r_host getHost();
 		protected:
 			friend class host;
 			//internall
-			static int32_t main(const int argc, const unsigned short** argv);
+			static int32_t _main(const int argc, const unsigned short** argv);
 			static int32_t mainStartupinfo(const int argc,
 				const unsigned short** argv,
 				const unsigned short* host_path,

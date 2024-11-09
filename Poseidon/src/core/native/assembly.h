@@ -5,7 +5,7 @@
 #include <memory>
 #include <core/native/interop/interop.h>
 #include "assemblyClass.h"
-namespace poseidon::core { class host; }
+#include <core/host.h>
 namespace poseidon::core::native
 {
 	class assembly
@@ -19,7 +19,7 @@ namespace poseidon::core::native
 			fileNotFound = -4
 		};
 		assembly() = default;
-		assembly(std::shared_ptr<host> p_host,int assemblyId,int contextId);
+		assembly(r_host host,int assemblyId,int contextId);
 		assembly(const assembly& other);
 		operator bool() const { return isValid(); }
 		bool isValid() const { return m_assemblyId > 0; }
@@ -37,7 +37,7 @@ namespace poseidon::core::native
 	private:
 		void loadFunctions();
 	private:
-		std::shared_ptr<host> p_host;
+		r_host host;
 		int m_assemblyId;
 		int m_contextId;
 	};

@@ -1,67 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoseidonSharp.native.interop
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct NativeArray<T> where T : struct
     {
-        public Int32 Size;
-        public GCHandle handle;
-        T[] array;
+        public int Size;
+        public IntPtr UnmanagedArray; // Pointer to unmanaged memory
 
-        public T GetValue(int index) => array[index];
         public NativeArray(T[] values)
         {
             Size = values.Length;
-            array = values;
-            handle = GCHandle.Alloc(array, GCHandleType.Pinned);
+
+            // Allocate unmanaged memory for the array
+            UnmanagedArray = Marshal.AllocHGlobal(Size * Marshal.SizeOf(typeof(T)));
+
+            // Copy the values from the managed array to the unmanaged array
+            for (int i = 0; i < values.Length; i++)
+            {
+                IntPtr elementPtr = IntPtr.Add(UnmanagedArray, i * Marshal.SizeOf(typeof(T)));
+                Marshal.StructureToPtr(values[i], elementPtr, false);
+            }
         }
+
+        // Method to retrieve the value from unmanaged memory
+        public T GetValue(int index)
+        {
+            if (index < 0 || index >= Size)
+                throw new IndexOutOfRangeException();
+
+            IntPtr elementPtr = IntPtr.Add(UnmanagedArray, index * Marshal.SizeOf(typeof(T)));
+            return Marshal.PtrToStructure<T>(elementPtr);
+        }
+
+        // Convert the structure to an IntPtr for use in C++
         public IntPtr ToIntptr()
         {
             IntPtr ptr = IntPtr.Zero;
             unsafe
             {
-                ptr = Marshal.AllocHGlobal(sizeof(UInt32) + sizeof(GCHandle) + sizeof(IntPtr));
-                Marshal.WriteInt32(ptr, Size);
-                Marshal.WriteIntPtr(ptr + sizeof(Int32), (IntPtr)handle);
-                Marshal.WriteIntPtr(ptr + sizeof(Int32) + sizeof(IntPtr), handle.AddrOfPinnedObject());
+                // Allocate unmanaged memory for the metadata (Size and pointer to UnmanagedArray)
+                ptr = Marshal.AllocHGlobal(sizeof(int) + IntPtr.Size);
+                Marshal.WriteInt32(ptr, Size);  // Write the size of the array
+                Marshal.WriteIntPtr(ptr + sizeof(int), UnmanagedArray);  // Write the pointer to the unmanaged array
             }
-          
             return ptr;
         }
-        // Dispose method for freeing unmanaged memory
+
+        // Method to free the unmanaged memory from C++ side
+        public static void FreeUnmanagedArray(IntPtr arrayPtr)
+        {
+            if (arrayPtr == IntPtr.Zero)
+                return;
+
+            // Retrieve the pointer to the unmanaged array
+            IntPtr unmanagedArray = Marshal.ReadIntPtr(arrayPtr + sizeof(int));
+
+            // Free the unmanaged memory
+            Marshal.FreeHGlobal(unmanagedArray);
+
+            // Free the structure itself
+            Marshal.FreeHGlobal(arrayPtr);
+        }
+
+        // Dispose method to free the unmanaged memory from the C# side
         public void Dispose()
         {
-            handle.Free();  
-            Dispose(true);
-            GC.SuppressFinalize(this); // Prevent finalizer from running
-        }
-
-        // Protected Dispose method to handle resource cleanup
-        void Dispose(bool disposing)
-        {
-            // If disposing is true, dispose managed resources here (if any)
-            if (array != null)
+            if (UnmanagedArray != IntPtr.Zero)
             {
-                array = null; // Clear the reference
+                Marshal.FreeHGlobal(UnmanagedArray);
+                UnmanagedArray = IntPtr.Zero;
             }
         }
-
-        public IntPtr GetAddress()
-        {
-            if (!handle.IsAllocated)
-                throw new InvalidOperationException("Array is not pinned.");
-
-            return handle.AddrOfPinnedObject();
-        }
-         
-        // Finalizer for cleanup (if Dispose is not called)
-
     }
 }

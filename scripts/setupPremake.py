@@ -28,7 +28,7 @@ def install_premake_thread(installer_path):
 def run_premake_vs2022(args):
     subprocess.run(["vendor\\premake5",
                     "vs2022",
-                    "--lib-type={0}".format(args.lib_type if args.lib_type else "SharedLib"),
+                    "--lib-type={0}".format(args.lib_type if args.lib_type else "StaticLib"),
                     ], check=True)
 
 

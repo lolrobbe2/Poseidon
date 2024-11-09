@@ -1,8 +1,12 @@
 #pragma once
 #ifndef _HOST_
 #define _HOST_
+
+#ifndef CHECK_HOST_VALID
+#define CHECK_HOST_VALID if (!host->isValid()) return;
+#endif
+
 #include "delegates/hdtDelegates.h"
-#include <core/native/AssemblyLoader.h>
 #include <filesystem>
 #include <core/managed/garbageCollector.h>
 typedef void* hostHandle;
@@ -17,6 +21,8 @@ namespace poseidon::core
 		get_function_pointer_fn get_function_pointer_ptr = nullptr;
 		operator bool()const { return load_assembly_ptr && get_function_pointer_ptr; }
 	};
+
+
 	class host : public std::enable_shared_from_this<host>
 	{
 	public:
@@ -25,11 +31,12 @@ namespace poseidon::core
 			success = 0,
 			failure = 1,
 			functions_not_initialized = 2,
+			host_invalid = 3,
 			load_assembly_filenotfound = -2146233079,
 			invalid_assembly_format = -2146234297,
 			type_load = -2146233054
 		};
-		enum delegateType
+		enum delegateType : int
 		{
 			com_activation,
 			load_in_memory_assembly,
@@ -43,7 +50,6 @@ namespace poseidon::core
 		};
 		host() = default;
 		host(hostHandle handle);
-
 		~host();
 		const hostHandle native() const { return m_handle; }
 		void release();
@@ -69,18 +75,20 @@ namespace poseidon::core
 		 * Currently, there's no way to release the function pointer after calling it, but this might be supported in the future.
 		 */
 		int getUnmangedFunctionPtr(const char_t* typeName, const char_t* methodName, void** function);
-		bool isValid() const { return m_handle; }
 		void getRuntimeDelegate(enum host::delegateType type, void** delegate);
-		std::shared_ptr<garbageCollector> getGarbageCollector();
-		std::shared_ptr<native::assemblyLoader> getAssemblyLoader(const std::string& name = "root");
+
+		bool isValid() const { return m_handle; }
+		const r_garbageCollector getGarbageCollector();
+
+		r_assemblyLoader getAssemblyLoader(const std::string& name = "root");
 		hostres loadAssembly(std::filesystem::path path);
+
 		operator bool() const { return m_handle; }
 	private:
-
+		host::hostres loadDelegates();
 		hostFunctions functions;
-		void loadDelegates();
 		hostHandle m_handle;
-		std::shared_ptr<garbageCollector> p_garbageCollector;
+		r_garbageCollector r_garbageCollector;
 	};
 
 }

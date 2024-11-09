@@ -13,7 +13,7 @@ namespace poseidon::core::native
 	};
 	static assemblyFunctions* p_assemblyFunctions = nullptr;
 	
-	assembly::assembly(std::shared_ptr<host> p_host, int assemblyId, int contextId) : p_host(p_host), m_assemblyId(assemblyId), m_contextId(contextId) { loadFunctions(); }
+	assembly::assembly(r_host host, int assemblyId, int contextId) : host(host), m_assemblyId(assemblyId), m_contextId(contextId) { loadFunctions(); }
 
 	
 	
@@ -58,10 +58,10 @@ namespace poseidon::core::native
 	{
 		if (p_assemblyFunctions) return;
 		p_assemblyFunctions = new assemblyFunctions();
-		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetNameNative"), (void**)&p_assemblyFunctions->assemblyGetNameNativePtr);
-		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionStringNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNativeString);
-		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNative);
-		p_host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetClassesNative"), (void**)&p_assemblyFunctions->assemblyGetClassesNativePtr);
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetNameNative"), (void**)&p_assemblyFunctions->assemblyGetNameNativePtr);
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionStringNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNativeString);
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNative);
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetClassesNative"), (void**)&p_assemblyFunctions->assemblyGetClassesNativePtr);
 
 	}
 }

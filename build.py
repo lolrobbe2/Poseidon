@@ -31,6 +31,12 @@ def main():
         action="store_true",
         help="enables windows subsystem for linux building of Athena"
     )
+    parser.add_argument(
+        "--lib-type",
+        type=str,
+        choices=["SharedLib", "StaticLib","Shared","Static"],
+        help="Choose a library type Shared or static"
+    )
     args = parser.parse_args()
 
     PythonRequirements.Validate(args.force_python)

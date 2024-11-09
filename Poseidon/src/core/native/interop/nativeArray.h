@@ -12,7 +12,6 @@ struct nativeArray
 {
 private:
 	int32_t size;
-	void* handle;
 	TYPE* p_array;
 
 public:

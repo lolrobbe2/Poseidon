@@ -107,6 +107,9 @@ project "Poseidon"
         filter "configurations:distribution"
             symbols "Off"
             optimize "On"
+            defines {
+                "WIN32"
+            }
 
     filter "system:linux"
         filter "configurations:debug"
@@ -188,6 +191,7 @@ project "PoseidonSharp"
     language "C#"
     dotnetframework "net8.0"
     csversion(9.0)
+    clr "Unsafe"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
     files
@@ -244,6 +248,7 @@ project "sandbox"
         "%{prj.location}/src/**.hpp",
         "%{prj.location}/**.cpp",
     }
+    
     filter "system:windows"
         cppdialect "c++20"
         systemversion "latest"

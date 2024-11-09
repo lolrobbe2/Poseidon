@@ -24,3 +24,13 @@ TEST_CASE("Host hosts are invalidated after CoreCLR shutdown"){
 	poseidon::core::CoreCLR::shutdown();
 	REQUIRE_FALSE(host->isValid());
 }
+
+TEST_CASE("Host host can be release manually") {
+	REQUIRE_NOTHROW([&]() {
+		poseidon::core::CoreCLR::init();
+		std::shared_ptr<poseidon::core::host> host = poseidon::core::HostFxr::getHost();
+		host->release();
+		REQUIRE_FALSE(host->isValid());
+		poseidon::core::CoreCLR::shutdown();
+		}());
+}

@@ -7,9 +7,9 @@ namespace poseidon::core
 	{
 	};
 	static assemblyClassFunctions* p_assemblyClassFunctionsPtr = nullptr;
-	void assemblyClass::loadFunctions(std::shared_ptr<host> p_host)
+	void assemblyClass::loadFunctions(r_host host)
 	{
 		if (p_assemblyClassFunctionsPtr) return;
-		//p_assemblyClassFunctionsPtr = new assemblyClassFunctions();
+		p_assemblyClassFunctionsPtr = new assemblyClassFunctions();
 	}
 }

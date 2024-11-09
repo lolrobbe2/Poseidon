@@ -2,11 +2,11 @@
 #ifndef _GARBAGE_COLLECTOR_
 #define _GARBAGE_COLLECTOR_
 #include <memory>
-
 #include <core/utils/platform.h>
+#include <core/native/refTypes.h>
 namespace poseidon::core 
 {
-	class host;
+	struct garbageCollectorFunctions;
 	class garbageCollector
 	{
 	public:
@@ -14,16 +14,13 @@ namespace poseidon::core
 		* @brief forces an immediate garbage collection of all generations
 		* @
 		*/
-		void collect();
-		void unpinHandle(void* handle);
-	protected:
-		friend class host;
-		garbageCollector(std::shared_ptr<host> p_host);
+		void collect() const;
+		void unpinHandle(void* handle) const;
 
-	
-
+		garbageCollector(r_host host);
 	private:
-		std::shared_ptr<host> p_host;
+		r_host p_host;
+		garbageCollectorFunctions* p_garbageCollectorFunctions = nullptr;
 	};
 
 }

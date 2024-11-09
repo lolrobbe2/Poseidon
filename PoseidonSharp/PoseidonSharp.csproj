@@ -3,10 +3,10 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFramework>net8.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>9.0</LangVersion>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <Platforms>x64</Platforms>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'debug|x64' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -51,11 +51,11 @@
     <Compile Include="src\Managed\GarbageCollector.cs" />
     <Compile Include="src\native\AssemblyClass.cs" />
     <Compile Include="src\native\AssemblyLoader.cs" />
-    <Compile Include="src\native\interop\Field.cs" />
-    <Compile Include="src\native\interop\NativeArray.cs" />
-    <Compile Include="src\native\interop\NativeVersion.cs" />
     <Compile Include="src\native\PoseidonAssembly.cs" />
     <Compile Include="src\native\interop\Bool32.cs" />
+    <Compile Include="src\native\interop\Field.cs" />
+    <Compile Include="src\native\interop\NativeArray.cs" />
     <Compile Include="src\native\interop\NativeString.cs" />
+    <Compile Include="src\native\interop\NativeVersion.cs" />
   </ItemGroup>
 </Project>

@@ -11,14 +11,14 @@ namespace poseidon::core::native
 	class assemblyLoader 
 	{
 	public:
-		assemblyLoader(std::shared_ptr<host> p_host,const std::string& path);
-		std::shared_ptr<assembly> loadAssembly(std::filesystem::path path);
+		assemblyLoader(r_host host,const std::string& name);
+		r_assembly loadAssembly(std::filesystem::path path);
 		void loadFunctions();
 		~assemblyLoader();
 
 	private:
 		int createContext(const std::string& name);
-		std::shared_ptr<host> p_host;
+		r_host host;
 		assemblyLoaderFunctions* p_assemblyLoaderFunctions = nullptr;
 		int m_loadContextId = 0;
 	};

@@ -12,7 +12,7 @@
 		auto assm = loader->loadAssembly("PoseidonSharp.dll");
 
 		const std::vector<poseidon::core::assemblyClass>classes = assm->getClasses();
-		//host->getGarbageCollector()->collect();
+		host->getGarbageCollector()->collect();
 
 		poseidon::core::CoreCLR::shutdown();
 		return 0;

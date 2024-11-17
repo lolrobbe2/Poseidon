@@ -51,6 +51,7 @@
     <Compile Include="src\Managed\GarbageCollector.cs" />
     <Compile Include="src\native\AssemblyClass.cs" />
     <Compile Include="src\native\AssemblyLoader.cs" />
+    <Compile Include="src\native\classField.cs" />
     <Compile Include="src\native\PoseidonAssembly.cs" />
     <Compile Include="src\native\interop\Bool32.cs" />
     <Compile Include="src\native\interop\Field.cs" />

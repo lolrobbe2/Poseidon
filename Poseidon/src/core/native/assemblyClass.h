@@ -6,7 +6,6 @@
 #pragma pack(push,1)
 namespace poseidon::core
 {
-	class host;
 	class assemblyClass
 	{
 	public:

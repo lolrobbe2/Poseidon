@@ -5,11 +5,14 @@ namespace poseidon::core
 {
 	struct assemblyClassFunctions
 	{
+		f_getFieldsNative assemblyClassGetFieldsNative = nullptr;
 	};
 	static assemblyClassFunctions* p_assemblyClassFunctionsPtr = nullptr;
 	void assemblyClass::loadFunctions(r_host host)
 	{
 		if (p_assemblyClassFunctionsPtr) return;
 		p_assemblyClassFunctionsPtr = new assemblyClassFunctions();
+
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.Field, PoseidonSharp"), PD_STR("GetFieldsNative"), (void**)p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative);
 	}
 }

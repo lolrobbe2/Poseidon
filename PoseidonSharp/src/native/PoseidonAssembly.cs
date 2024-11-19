@@ -45,11 +45,11 @@ namespace PoseidonSharp.native
         public int GetClassCount() { return GetNative().GetTypes().Length; }
         public NativeArray<AssemblyClass> GetClasses()
         {
-   
-                return new NativeArray<AssemblyClass>(GetNative().GetTypes().Where(type => type.IsClass && !(type.Name.StartsWith('<') || type.Name.EndsWith('>'))).Select(ClassType => new AssemblyClass(ClassType, m_ContextId, m_AssemblyId)).ToArray());
-
-    
-
+                return new NativeArray<AssemblyClass>(GetNative()
+                    .GetTypes()
+                    .Where(type => type.IsClass && !(type.Name.StartsWith('<') || type.Name.EndsWith('>')))
+                    .Select(ClassType => new AssemblyClass(ClassType, m_ContextId, m_AssemblyId))
+                    .ToArray());
         }
         public AssemblyClass? GetClassRaw(string name)
         {

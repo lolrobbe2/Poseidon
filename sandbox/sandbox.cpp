@@ -5,7 +5,7 @@
 
 	int main(int argc, char** argv) {
 		poseidon::core::CoreCLR::init();
-		std::cout << poseidon::core::CoreCLR::getDotnetRoot() << std::endl;
+		//std::cout << poseidon::core::CoreCLR::getDotnetRoot() << std::endl;
 		poseidon::r_host host = poseidon::core::HostFxr::getHost();
 		
 		poseidon::r_assemblyLoader loader = host->getAssemblyLoader();

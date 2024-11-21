@@ -59,6 +59,23 @@ namespace PoseidonSharp.native
             catch (Exception) { return AssemblyLoadRes.failure; }
         }
 
+        [UnmanagedCallersOnly]
+        internal static NativeString GetName(int loadAssemblyContextId)
+        {
+            try
+            {
+                NativeString assemblyLoadContext = assemblyLoadContexts[loadAssemblyContextId].Name;
+                assemblyLoadContext.setManaged(true);
+                return assemblyLoadContext;
+            }
+            catch (Exception)
+            {
+                NativeString res = "";
+                res.setManaged(true);
+                return res;
+            }
+        }
+
         internal static Assembly GetAssembly(int loadAssemblyContextId,int assemblyId)
         {
             if(s_AssemblyCache.TryGetValue(loadAssemblyContextId, out Assembly asm)) return asm;

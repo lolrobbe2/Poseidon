@@ -13,7 +13,29 @@ namespace poseidon::core::native
 	};
 	static assemblyFunctions* p_assemblyFunctions = nullptr;
 	
-	assembly::assembly(r_host host, int assemblyId, int contextId) : host(host), m_assemblyId(assemblyId), m_contextId(contextId) { loadFunctions(); }
+	assembly::assembly(r_host host, int assemblyId, int contextId) : host(host), m_assemblyId(assemblyId), m_contextId(contextId) {
+		if (!isValid()) {
+			switch ((assembly::assemblyLoadRes) assemblyId)
+			{
+			case assemblyLoadRes::failure:
+				throw std::exception("[assembly] was unable to load: failure");
+				break;
+			case assemblyLoadRes::fileNotFound:
+				throw std::filesystem::filesystem_error(
+					"[assmbly] asembly not found!",
+					std::error_code(static_cast<int>(std::errc::no_such_file_or_directory), std::generic_category())
+				);
+				break;
+			case assemblyLoadRes::badPath:
+				throw std::invalid_argument("[assembly] provided path was invalid");
+				break;
+			case assemblyLoadRes::badILformat:
+				throw std::runtime_error("[assembly] The .NET assembly has a bad or corrupt IL format.");
+				break;
+			}
+		}
+		loadFunctions(); 
+	}
 
 	
 	

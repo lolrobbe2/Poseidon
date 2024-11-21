@@ -5,4 +5,5 @@ namespace poseidon::core
 {
 	using f_createContext = int (PD_CALLTYPE*)(nativeString string);
 	using f_loadAssembly = int (PD_CALLTYPE*)(int contextId, nativeString path);
+	using f_getName = nativeString(PD_CALLTYPE*)(int contextId);
 }

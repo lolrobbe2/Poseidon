@@ -9,11 +9,11 @@
 		poseidon::r_host host = poseidon::core::HostFxr::getHost();
 		
 		poseidon::r_assemblyLoader loader = host->getAssemblyLoader();
-		auto assm = loader->loadAssembly("PoseidonSharp.dll");
+		auto assm = loader->loadAssembly("_PoseidonSharp.dll");
 
-		const std::vector<poseidon::core::assemblyClass>classes = assm->getClasses();
+		//const std::vector<poseidon::core::assemblyClass>classes = assm->getClasses();
 		host->getGarbageCollector()->collect();
-
+		std::cout << loader->getName() << std::endl;
 		poseidon::core::CoreCLR::shutdown();
 		return 0;
 	}

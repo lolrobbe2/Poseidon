@@ -14,6 +14,7 @@ namespace poseidon::core::native
 		assemblyLoader(r_host host,const std::string& name);
 		r_assembly loadAssembly(std::filesystem::path path);
 		void loadFunctions();
+		std::string getName();
 		~assemblyLoader();
 
 	private:

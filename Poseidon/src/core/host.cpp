@@ -11,7 +11,8 @@ namespace poseidon::core
 	host::host(hostHandle handle) : m_handle(handle)
 	{
 		loadDelegates();
-		loadAssembly("./PoseidonSharp.dll");
+		if (success != loadAssembly("./PoseidonSharp.dll"))
+			throw new std::exception("unable to load PoseidonSharp.dll");
 	}
 	
 	host::~host()

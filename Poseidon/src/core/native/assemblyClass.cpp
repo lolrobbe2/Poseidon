@@ -15,4 +15,9 @@ namespace poseidon::core
 
 		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.Field, PoseidonSharp"), PD_STR("GetFieldsNative"), (void**)p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative);
 	}
+
+	const std::vector<field> assemblyClass::getFields() const
+	{
+		return p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative(m_contextId,m_assemblyId,name)->toVector();
+	}
 }

@@ -21,7 +21,6 @@ public:
 	operator const size_t() const { return size; }
 	const std::vector<TYPE> toVector() const { return std::vector<TYPE>(p_array, p_array + size); }
 	operator const std::vector<TYPE>() const { return toVector(); }
-
 };
 #pragma pack(pop)
 

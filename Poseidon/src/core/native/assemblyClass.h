@@ -10,6 +10,7 @@ namespace poseidon::core
 	{
 	public:
 		static void loadFunctions(r_host host);
+		const std::vector<field> getFields() const;
 	private:
 		const nativeString name;
 		const nativeString nameSpace;

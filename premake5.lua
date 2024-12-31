@@ -161,7 +161,8 @@ project "PoseidonTest"
         systemversion "latest"
         links
         {
-            "Poseidon"
+            "Poseidon",
+            "PoseidonSharp"
         }
         filter "configurations:debug"
             symbols "On"

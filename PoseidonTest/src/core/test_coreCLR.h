@@ -17,7 +17,12 @@ TEST_CASE("CoreCLR_init init returns false when initialized", "[CoreCLR]") {
 TEST_CASE("Hostfxr_loadfunctions Hostfxr loadfunctions fails when _lib is not valid", "[hostfxr]") {
 	REQUIRE_FALSE(poseidon::core::HostFxr::loadFunctions());
 }
-
+TEST_CASE("Host does not throw when loading poseidonSharp.dll", "[CoreCLR]") {
+	poseidon::core::CoreCLR::init();
+	poseidon::r_host host;
+	REQUIRE_NOTHROW(host = poseidon::core::HostFxr::getHost());
+	poseidon::core::CoreCLR::shutdown();
+}
 TEST_CASE("Host hosts are invalidated after CoreCLR shutdown", "[CoreCLR]"){
 	poseidon::core::CoreCLR::init();
 	poseidon::r_host host = poseidon::core::HostFxr::getHost();
@@ -25,7 +30,7 @@ TEST_CASE("Host hosts are invalidated after CoreCLR shutdown", "[CoreCLR]"){
 	REQUIRE_FALSE(host->isValid());
 }
 
-TEST_CASE("host can be release manually", "[hostfxr]") {
+TEST_CASE("host can be released manually", "[hostfxr]") {
 	REQUIRE_NOTHROW([&]() {
 		poseidon::core::CoreCLR::init();
 		poseidon::r_host host = poseidon::core::HostFxr::getHost();

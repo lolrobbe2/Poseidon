@@ -35,24 +35,25 @@ namespace PoseidonSharp.native
         }
         public Type? GetType()
         {
-            Console.WriteLine($"{NameSpace}.{Name}, {AssemblyName}");
             return Type.GetType($"{NameSpace}.{Name}, {AssemblyName}", true,false);
         }
         public FieldInfo[] GetFields()
         {
-            return GetType()!.GetFields();
+            // Return all fields: public, non-public, instance, and static
+            return GetType()!.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
         }
+
         [UnmanagedCallersOnly]
         internal unsafe static IntPtr GetFieldsNative(int contextId, int assemblyId, NativeString name)
         {
             try
             {
-                Console.WriteLine(name.ToString());
-                Console.WriteLine(Type.GetType(name, true, false));
                 AssemblyClass? assemblyClass = new AssemblyClass(Type.GetType(name, true, false),contextId,assemblyId) ;
-                Field[] fields = assemblyClass?.GetFields().Select(field => new Field(field)).ToArray();
-                Console.WriteLine(fields.Length);
-                return new NativeArray<Field>().ToIntptr();
+                Field[]? fields = assemblyClass?.GetFields().Select(field => new Field(field)).ToArray();
+                if (fields != null)
+                    return new NativeArray<Field>(fields).ToIntptr();
+                else
+                    return new NativeArray<Field>(Array.Empty<Field>()).ToIntptr();
             }
             catch(Exception e) {
                 Console.WriteLine(e.ToString());

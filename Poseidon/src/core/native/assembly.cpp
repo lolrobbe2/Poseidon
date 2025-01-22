@@ -84,6 +84,6 @@ namespace poseidon::core::native
 		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionStringNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNativeString);
 		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetVersionNative"), (void**)&p_assemblyFunctions->assemblyGetVersionNative);
 		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.PoseidonAssembly, PoseidonSharp"), PD_STR("GetClassesNative"), (void**)&p_assemblyFunctions->assemblyGetClassesNativePtr);
-
+		assemblyClass::loadFunctions(host);
 	}
 }

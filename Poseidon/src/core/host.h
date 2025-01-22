@@ -11,6 +11,7 @@
 #include <core/managed/garbageCollector.h>
 typedef void* hostHandle;
 typedef int (PD_CALLTYPE* UnmanagedFunctionPtr)();
+
 namespace poseidon::core
 {
 	struct hostFunctions

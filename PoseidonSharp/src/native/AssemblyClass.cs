@@ -6,11 +6,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml.Linq;
+#nullable enable
 namespace PoseidonSharp.native
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct AssemblyClass
+    public struct AssemblyClass
     {
         
         public interop.NativeString Name;
@@ -34,18 +35,29 @@ namespace PoseidonSharp.native
         }
         public Type? GetType()
         {
-            return Type.GetType(Name,false,false);
+            Console.WriteLine($"{NameSpace}.{Name}, {AssemblyName}");
+            return Type.GetType($"{NameSpace}.{Name}, {AssemblyName}", true,false);
         }
         public FieldInfo[] GetFields()
         {
-            return GetType()?.GetFields();
+            return GetType()!.GetFields();
         }
         [UnmanagedCallersOnly]
-        unsafe static public IntPtr GetFieldsNative(int contextId, int assemblyId, NativeString name)
+        internal unsafe static IntPtr GetFieldsNative(int contextId, int assemblyId, NativeString name)
         {
-            AssemblyClass assemblyClass = new AssemblyClass(name, contextId, assemblyId);
-            Field[] fields = (Field[])assemblyClass.GetFields().Select(field => new Field(field));
-            return new NativeArray<Field>().ToIntptr();
+            try
+            {
+                Console.WriteLine(name.ToString());
+                Console.WriteLine(Type.GetType(name, true, false));
+                AssemblyClass? assemblyClass = new AssemblyClass(Type.GetType(name, true, false),contextId,assemblyId) ;
+                Field[] fields = assemblyClass?.GetFields().Select(field => new Field(field)).ToArray();
+                Console.WriteLine(fields.Length);
+                return new NativeArray<Field>().ToIntptr();
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.ToString());
+                return IntPtr.Zero;
+            }
         }
     }
 }

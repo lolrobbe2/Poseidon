@@ -13,11 +13,16 @@ namespace poseidon::core
 		if (p_assemblyClassFunctionsPtr) return;
 		p_assemblyClassFunctionsPtr = new assemblyClassFunctions();
 
-		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.Field, PoseidonSharp"), PD_STR("GetFieldsNative"), (void**)p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative);
+		host->getUnmangedFunctionPtr(PD_STR("PoseidonSharp.native.AssemblyClass, PoseidonSharp"), PD_STR("GetFieldsNative"), (void**)&p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative);
 	}
 
 	const std::vector<field> assemblyClass::getFields() const
 	{
-		return p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative(m_contextId,m_assemblyId,name)->toVector();
+		std::string _nameSpace = nameSpace;
+		std::string _name = name;
+		std::string _assemblyName = assemblyName;
+		std::string typeName = _nameSpace + "." + _name + ", " + _assemblyName;
+		nativeString nativeTypeName{ typeName };
+		return p_assemblyClassFunctionsPtr->assemblyClassGetFieldsNative(m_contextId,m_assemblyId,nativeTypeName)->toVector();
 	}
 }

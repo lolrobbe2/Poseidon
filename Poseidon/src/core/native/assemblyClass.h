@@ -3,6 +3,7 @@
 #define _ASSEMBLY_CLASS_
 #include <core/native/interop/interop.h>
 #include <core/native/refTypes.h>
+#include <core/native/classField.h>
 #pragma pack(push,1)
 namespace poseidon::core
 {

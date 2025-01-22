@@ -103,6 +103,7 @@ namespace poseidon::core
 		std::sort(versionDirs.begin(), versionDirs.end(), [](const std::filesystem::path& a, const std::filesystem::path& b) {
 			return parseVersion(a.filename().string()) > parseVersion(b.filename().string());
 			});
+		
 		return *versionDirs.begin();
 	}
 

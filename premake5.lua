@@ -31,14 +31,13 @@ newoption {
     trigger     = "lib-type",
     value       = "LIB-TYPE",
     description = "Choose a library type Shared or static",
-    default     = "SharedLib",
+    default     = "StaticLib",
     category    = "project Options",
     allowed = {
         { "SharedLib","Shared"},
         { "StaticLib","Static"}
     }
 }
-
 
 flags
 {
@@ -68,7 +67,7 @@ IncludeDir["Catch2"] =  "%{prj.location}/src/thirdParty/catch2/src/"
 group"core"
 project "Poseidon"
     location "Poseidon"
-    kind(_OPTIONS["lib-type"])
+    kind "StaticLib"
     language "c++"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
@@ -123,10 +122,13 @@ project "Poseidon"
     if _OPTIONS["enable-WSL"] then
         toolchainversion "wsl2"
     end
+
+group"core/test"
 project "PoseidonTest"
     location "PoseidonTest"
     kind "ConsoleApp"
     language "c++"
+    cppdialect "c++20"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
     debugdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
@@ -157,7 +159,6 @@ project "PoseidonTest"
     
 
     filter "system:windows"
-        cppdialect "c++20"
         systemversion "latest"
         links
         {
@@ -185,13 +186,13 @@ project "PoseidonTest"
     if _OPTIONS["enable-WSL"] then
         toolchainversion "wsl2"
     end
-
+group "core"
 project "PoseidonSharp"
     location "PoseidonSharp"
     kind "SharedLib"
     language "C#"
     dotnetframework "net8.0"
-    csversion(9.0)
+    csversion "9.0"
     clr "Unsafe"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
@@ -229,7 +230,7 @@ project "sandbox"
     location "sandbox"
     kind "ConsoleApp"
     language "c++"
-
+    debuggertype "NativeWithManagedCore"
     targetdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")
     objdir("%{wks.location}/bin-int/" .. outputdir .. "/x64/%{prj.name}")
     debugdir("%{wks.location}/bin/" .. outputdir .. "/x64/%{prj.name}")

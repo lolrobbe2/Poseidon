@@ -53,8 +53,10 @@ namespace PoseidonSharp.native
         }
         public AssemblyClass? GetClassRaw(string name)
         {
+            Console.WriteLine(name);
             Type? type = GetNative().GetTypes().FirstOrDefault(type => type.IsClass && type.Name.Equals(name));
             if (type == null) return null;
+            Console.WriteLine(type);
             return new(type,m_ContextId,m_AssemblyId);
         }
         public AssemblyClass? GetClass(string name)

@@ -13,6 +13,7 @@ namespace PoseidonSharp.native.interop
         {
             Size = values.Length;
 
+      
             // Allocate unmanaged memory for the array
             UnmanagedArray = Marshal.AllocHGlobal(Size * Marshal.SizeOf(typeof(T)));
 
@@ -20,7 +21,7 @@ namespace PoseidonSharp.native.interop
             for (int i = 0; i < values.Length; i++)
             {
                 IntPtr elementPtr = IntPtr.Add(UnmanagedArray, i * Marshal.SizeOf(typeof(T)));
-                Marshal.StructureToPtr(values[i], elementPtr, false);
+                Marshal.StructureToPtr(values[i], elementPtr, true);
             }
         }
 

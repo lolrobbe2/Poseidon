@@ -1,3 +1,4 @@
 {
-    "premake.version": "latest"
+    "premake.version": "Premake 5.0-beta4",
+    "premake.action": "vs2022"
 }

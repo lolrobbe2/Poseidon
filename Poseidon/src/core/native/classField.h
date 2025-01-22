@@ -6,7 +6,7 @@
 #pragma pack(push,1)
 namespace poseidon::core 
 {
-    enum fieldAttributes
+    enum fieldAttributes : int 
     {
         //
         // Summary:
@@ -100,7 +100,7 @@ namespace poseidon::core
         static void loadFunctions(r_host host);
     private:
         const nativeString name;
-        const runtimeFieldHandle fieldHandle;
+        const fieldAttributes attributes;
 	};
 }
 #pragma pack(pop)

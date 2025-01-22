@@ -11,7 +11,9 @@
 		poseidon::r_assemblyLoader loader = host->getAssemblyLoader();
 		auto assm = loader->loadAssembly("PoseidonSharp.dll");
 
-		//const std::vector<poseidon::core::assemblyClass>classes = assm->getClasses();
+		const std::vector<poseidon::core::assemblyClass>classes = assm->getClasses();
+		
+		const std::vector<poseidon::core::field> fields = classes[0].getFields();
 		host->getGarbageCollector()->collect();
 		std::cout << loader->getName() << std::endl;
 		poseidon::core::CoreCLR::shutdown();

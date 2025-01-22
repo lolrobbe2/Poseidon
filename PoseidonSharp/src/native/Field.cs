@@ -12,8 +12,8 @@ namespace PoseidonSharp.native
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Field
     {
-        public NativeString name;
-        public FieldAttributes attributes;
+            public NativeString name;
+            public FieldAttributes attributes;
         
         public Field(FieldInfo info)
         {
